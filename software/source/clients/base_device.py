@@ -223,7 +223,7 @@ class Device:
         """Detect spacebar press and Ctrl+C combination."""
         self.pressed_keys.add(key)  # Add the pressed key to the set
 
-        if keyboard.Key.space in self.pressed_keys:
+        if key == keyboard.KeyCode.from_char("§"):
             self.toggle_recording(True)
         elif {keyboard.Key.ctrl, keyboard.KeyCode.from_char('c')} <= self.pressed_keys:
             logger.info("Ctrl+C pressed. Exiting...")
@@ -234,7 +234,7 @@ class Device:
         """Detect spacebar release and 'c' key press for camera, and handle key release."""
         self.pressed_keys.discard(key)  # Remove the released key from the key press tracking set
 
-        if key == keyboard.Key.space:
+        if key == keyboard.KeyCode.from_char("§"):
             self.toggle_recording(False)
         elif CAMERA_ENABLED and key == keyboard.KeyCode.from_char('c'):
             self.fetch_image_from_camera()
@@ -255,9 +255,9 @@ class Device:
             try:
                 async with websockets.connect(WS_URL) as websocket:
                     if CAMERA_ENABLED:
-                        print("\nPress the spacebar to start/stop recording. Press 'c' to capture an image from the camera. Press CTRL-C to exit.")
+                        print("\nPress the § to start/stop recording. Press 'c' to capture an image from the camera. Press CTRL-C to exit.")
                     else:
-                        print("\nPress the spacebar to start/stop recording. Press CTRL-C to exit.")
+                        print("\nPress the § to start/stop recording. Press CTRL-C to exit.")
                         
                     asyncio.create_task(self.message_sender(websocket))
 
